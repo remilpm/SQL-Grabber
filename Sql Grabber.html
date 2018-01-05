@@ -1,0 +1,433 @@
+<HTML>
+<HEAD>
+<script language="JavaScript1.2">
+	var newwindow2;
+
+	function ShowAboutSQRGrabber(frmForm)
+	{
+		if (newwindow2 != null)
+			newwindow2.close();
+
+		newwindow2 =window.open("","name","height=500,width=580,top=125,left=200");
+		var tmp = newwindow2.document;
+		tmp.write('<html><head><title>Author</title>')
+
+		tmp.write('<STYLE type=text/css><!--BODY{background-color:#ffffff;font-family:verdana,sans-serif}PRE{font-family:sans-serif}--></STYLE>');
+
+		//tmp.write('<table border=2><tr><td>')
+		tmp.write('<B><U>About SQL Grabber</U>: </B><BR><BR>')
+
+		tmp.write('<I> <font size=2>')
+		tmp.write('<B>SQR-SQL</B>&nbsp;&nbsp;&nbsp;   : SQL form meaningful to SQR Runtime.<BR>')
+		tmp.write('<B>RDBMS-SQL</B>: SQL form meaningful to any RDBMS Query Tool.<BR><BR>')
+		tmp.write('</I><font>')
+
+
+		tmp.write('For Data analysis and Debugging purpose, Peoplesoft Development and Production Support Team often are in need to convert SQR-SQL to RDBMS-SQL.<BR> ')
+
+		tmp.write('A typical SQR-SQL would have following pieces in between BEGIN-SELECT and END-SELECT.<BR>')
+		tmp.write('1. SQR Comments<BR>')
+		tmp.write('2. SQR Programming Logics<BR>')
+		tmp.write('3. Function Calls<BR>')
+		tmp.write('4. SQR Variables<BR>')
+
+		tmp.write('<BR>Traditionally, Developers would manually remove the above pieces from the SQR-SQL, and include comma(,) after each column of the SQL Column List. Most importantly, Developer would spend hard time removing SQR comments from SQR-SQL.<BR><BR>')
+
+		tmp.write('<B>Solution :</B> SQR-Grabber tool is designed to parse SQR-SQL and form RDBMS-SQL. The result query can be directly used on any RDBMS-SQL Query tool with no or little modifications.<BR>')
+
+		
+
+
+     	tmp.write('</body></html>')
+		tmp.close();
+	}
+
+
+	function ShowHelp(frmForm)
+	{
+
+
+		if (newwindow2 != null)
+			newwindow2.close();
+
+		newwindow2 =window.open("","name","height=320,width=700,scrollbars=1,top=200,left=150");
+		var tmp = newwindow2.document;
+		tmp.write('<html><head><title>Help</title>')
+
+		tmp.write('<STYLE type=text/css><!--BODY{background-color:#ffffff;font-family:verdana,sans-serif}PRE{font-family:sans-serif}--></STYLE>');
+
+		tmp.write('<B><U>Help</U>: </B><BR><BR>')
+
+		tmp.write('<B><I>Step 1</I></B> : Paste SQR-SQL (Compiled SQR BEGIN-SELECT block) in the first Textbox.<BR>')
+		tmp.write('<B><I>Step 2</I></B> : Press/Click "Get RDBMS SQL" button<BR>')
+		tmp.write('<B><I>Step 3</I></B> : Find the RDBMS SQL in the RDBMS-SQL Read-Only TextBox.<BR><BR><BR>')
+
+		tmp.write('<U><B>Example :</B></U><BR>')
+		tmp.write('Place the following typical SQR-SQL in the first Textbox and Press "Get RDBMS SQL" button. You could see RDBMS-SQL in the ')
+        tmp.write('second Textbox that can be directly used in any SQL Query tool.<BR><BR>')
+
+		tmp.write('<I> <font size=1>')
+
+		tmp.write('begin-SELECT DISTINCT<BR>')
+		tmp.write('PAYE.ACCT_CD<BR>')
+		tmp.write('PAYE.PAYGROUP<BR>')
+
+ 		tmp.write('&nbsp;&nbsp;&nbsp;&nbsp; move $Company       to $Company_Header<BR>')
+		tmp.write('&nbsp;&nbsp;&nbsp;&nbsp; move &PAYE.PAYGROUP to $PayGroup_Header<BR>')
+		tmp.write('&nbsp;&nbsp;&nbsp;&nbsp; move &PAYE.ACCT_CD  to $Account_Code<BR>')
+
+
+		tmp.write("&nbsp;&nbsp;&nbsp;&nbsp;   let $Account_Code = RTRIM(&Paye.ACCT_CD, ' ')<BR>")
+		tmp.write("&nbsp;&nbsp;&nbsp;&nbsp;   let $BM = rtrim($Paygroup_Header, ' ')<BR>")
+		tmp.write('&nbsp;&nbsp;&nbsp;&nbsp;   do Get-State-Location<BR>')
+		tmp.write('&nbsp;&nbsp;&nbsp;&nbsp;   do Get-Key-Value($Account_Code,$Sort_Prov,$BM,$Key)<BR>')
+		tmp.write('&nbsp;&nbsp;&nbsp;&nbsp;   put $Province $BM $PayEndDate $Account_Code $Key into Province_Sort(#i1)<BR>')
+		tmp.write('&nbsp;&nbsp;&nbsp;&nbsp;   add 1 to #i1<BR>')
+
+
+		tmp.write('FROM     PS_PAY_EARNINGS  PAYE<BR>')
+
+		tmp.write('WHERE    <BR>')
+		tmp.write('1=1<BR>')
+		tmp.write("!  AND    PAYE.ACCT_CD        <> ''<BR>")
+
+
+
+		tmp.write('! Null value handling in Oracle 2004-09-01<BR>')
+		tmp.write('  AND    PAYE.ACCT_CD        IS NOT NULL  <BR>')
+		tmp.write('  AND (  PAYE.REG_EARNS      <> 0<BR>')
+		tmp.write('     OR  PAYE.REG_HRLY_EARNS <> 0<BR>')
+		tmp.write('     OR  PAYE.OT_HRLY_EARNS  <> 0 )<BR>')
+		tmp.write("  UNION<BR>")
+		tmp.write('  SELECT DISTINCT<BR>')
+		tmp.write('         PAYE.ACCT_CD<BR>')
+		tmp.write('  ,      PAYE.PAYGROUP<BR>')
+
+		tmp.write('  FROM   PS_PAY_EARNINGS   PAYE<BR>')
+		tmp.write('  ,      PS_PAY_OTH_EARNS  POTH<BR>')
+		tmp.write("WHERE    PAYE.COMPANY           = 'XYZ'<BR>")
+		tmp.write("AND    PAYE.PAY_END_DT  = '15-Aug-2007'<BR>")
+		tmp.write("!AND    PAYE.ACCT_CD    <> ''<BR>")
+		tmp.write('! Null value handling in Oracle 2004-09-01<BR>')
+		tmp.write(' AND    PAYE.ACCT_CD        IS NOT NULL<BR>')
+		tmp.write('AND    POTH.COMPANY     = PAYE.COMPANY<BR>')
+		tmp.write('AND    POTH.PAYGROUP    = PAYE.PAYGROUP<BR>')
+		tmp.write('AND    POTH.PAY_END_DT  = PAYE.PAY_END_DT<BR>')
+		tmp.write('AND    POTH.OFF_CYCLE   = PAYE.OFF_CYCLE<BR>')
+		tmp.write('AND    POTH.PAGE#       = PAYE.PAGE#<BR>')
+		tmp.write('AND    POTH.LINE#       = PAYE.LINE#<BR>')
+		tmp.write('AND    POTH.ADDL#       = PAYE.ADDL#<BR>')
+		tmp.write("AND    POTH.ERNCD  NOT IN ('ADD','ADJ','CAV','VAC','IPO','IPA','IVT'<BR>")
+		tmp.write("                          ,'IVC','ESI','QAI','TBL','TBP','TBX','WCB')<BR>")
+		tmp.write('AND (  POTH.OTH_PAY    <> 0<BR>')
+		tmp.write('   OR  POTH.OTH_EARNS  <> 0 )<BR>')
+		tmp.write(' UNION<BR>')
+		tmp.write(' SELECT DISTINCT<BR>')
+		tmp.write('         BME.DEPTID<BR>')
+		tmp.write('  ,      BME.PAYGROUP<BR>')
+		tmp.write('  FROM   PS_BM_EDR_ACCRUALS BME<BR>')
+		tmp.write('WHERE    <BR>')
+		tmp.write('1=1<BR>')
+		tmp.write("AND    BME.PAYGROUP       IN ('XYZ')<BR>")
+		tmp.write('AND    BME.BM_ACCRUAL_AMT <> 0<BR>')
+
+		tmp.write('ORDER BY 1,2<BR>')
+		tmp.write('end-select')
+
+
+		tmp.write('</font></I>')
+
+		tmp.write('<P align= center><a href="javascript:self.close()">Close</a> &nbsp;&nbsp;</P><BRn>')
+
+		tmp.write('</body></html>')
+		tmp.close();
+
+	}
+
+
+   function GetSQL(frmsql) {
+     //Get the SQR SQL into SqrStr Varible
+	     var SqrStr = frmsql.sqrsql.value;
+
+		  SqrStr = RemoveBeginSelect(SqrStr);
+		  if (SqrStr == "")
+			return;
+		  SqrStr=  RemoveComments(SqrStr);
+		  SqrStr=  ParseSelectStmt(SqrStr);
+		  frmsql.sql.value=SqrStr;
+	      frmsql.sqrsql.focus();
+
+   }
+
+   //Replacing BEGIN-SELECT and END-SELECT
+    function RemoveBeginSelect(SqrStr){
+    SqrStr=SqrStr.toUpperCase();
+	//Removing the lines before BEGIN-SELECT and after END-SELECT
+    if (SqrStr.indexOf("BEGIN-SELECT") == -1 )
+    {
+	alert("BEGIN-SELECT Command not found.");
+	frmsql.sqrsql.focus();
+	return "";
+    }
+
+    if (SqrStr.indexOf("END-SELECT") == -1 )
+    {
+	alert("END-SELECT Command not found.");
+	frmsql.sqrsql.focus();
+	return "";
+    }
+    SqrStr=SqrStr.substring(SqrStr.indexOf("BEGIN-SELECT"),SqrStr.indexOf("END-SELECT"));
+	SqrStr=SqrStr.replace("BEGIN-SELECT","SELECT");
+    SqrStr=SqrStr.replace("END-SELECT","");
+	return SqrStr;
+   }
+
+  //Removing Commented Lines and lines starting with #(like #ifndef debug1) From the Query
+
+  function RemoveComments(SqrStr){
+    var newSql;
+	newSql = "";
+    StrArray = new Array();
+    StrArray = SqrStr.split("\n");
+    for (i=0; i < StrArray.length; i++) {
+       if ( (ltrim(rtrim(StrArray[i])).indexOf("!") == 0 ) || (ltrim(rtrim(StrArray[i])).indexOf("#") == 0 ) ){
+	   }
+ 	   else{
+            newSql= newSql + StrArray[i] + "\n";
+	      }
+ 	}
+   return newSql;
+  }
+
+  //Removing The Lines beween Select Columns
+  function ParseSelectStmt(SqrStr){
+    var indOfFrom;
+	var selectPart;
+	var fromPart;
+	var ParseSelect;
+	var CommaSelect;
+	var StrSQL;
+	var ArraySQL;
+	var FinalSQL;
+	var selectSQL;
+	ParseSelect="";
+	CommaSelect="";
+	StrSQL="";
+	ArraySQL="";
+	FinalSQL="";
+	selectSQL="";
+	selectPart="";
+	fromPart="";
+	SelectArray  = new Array();
+	FromArray = new Array();
+    //converting String to Upper Case
+	SqrStr=SqrStr.toUpperCase();
+    SelArray=SqrStr.split("\n");
+	//This Logic is for If any write stament of sqr used in between the Query it will ignore that "FROM"
+	//from the Query.
+	FromIndex=0;
+	for (i=0; i < SelArray.length -1; i++) {
+	   //alert(SelArray[i]);
+	   //alert(SelArray[i].indexOf("FROM "));
+	   if(SelArray[i].indexOf("DISTINCT") >= 0)
+         SelArray[i] = "SELECT DISTINCT" ;
+      if(SelArray[i].indexOf("ON-ERROR") >= 1)//Ignoring ON-ERROR From Select
+	      SelArray[i] = "SELECT" ;
+
+//     SelArray[i] = SelArray[i].replace(/SELECT /g ,'SELECT')
+      if (ltrim(rtrim(SelArray[i])).indexOf("FROM") == 0){
+	      FromIndex= i;
+	   break;
+	   }
+
+	   selectPart =selectPart + SelArray[i] + "\n";
+	}
+     if (FromIndex == 0){
+
+	    alert("FROM Keyword not found");
+	    frmsql.sqrsql.focus();
+	     return "";
+
+	   }
+//	alert(selectPart);
+//	alert(FromIndex);
+    for(j=FromIndex; j < SelArray.length -1; j++){
+// alert(SelArray[j]);
+      SelArray[j] = SelArray[j].replace(/\#/g ,':'); // Replacing # with :
+	  fromPart =  fromPart + SelArray[j].replace(/\$/g ,':') + "\n";// Replacing $ with :
+	}
+
+  //  alert(fromPart);
+
+    SelectArray = selectPart.split("\n");
+    for (i=0; i < SelectArray.length -1; i++) {
+       //alert(SelectArray[i]);
+	   //alert((rtrim(SelectArray[i]).indexOf(" ")));
+	   /*if (i == 0)
+	     ParseSelect= ParseSelect + SelectArray[i] +  "\n"  ;
+	   else{
+	      if((rtrim(SelectArray[i]).indexOf(" ") == -1) && (rtrim(SelectArray[i]) != "")){
+     		   ParseSelect= ParseSelect + SelectArray[i] +  "\n"  ;
+	        }
+	    }*/
+       if ( i==0 )
+           ParseSelect= ParseSelect + SelectArray[i] +  "\r\n"  ;
+       else {
+	   if ((ltrim(rtrim(SelectArray[i].charAt(0))) != "") && (rtrim(SelectArray[i]) != ""))
+	  //if (((rtrim(SelectArray[i]).indexOf(" ")) != 0) && (rtrim(SelectArray[i]) != "")) {
+         ParseSelect= ParseSelect + SelectArray[i] +  "\n"  ;
+	  }
+	}
+
+  //alert(ParseSelect);
+
+  //Placing commas between the DB Variables
+    SelectArray = ParseSelect.split("\r\n");
+   for (i=0; i < SelectArray.length - 1; i++) {
+//        SelectArray[i]=SelectArray[i].replace(",","");
+        if ((i==0) || (i== SelectArray.length - 2) ){
+           if(SelectArray[i].indexOf(" ") == -1 ) //Removing the string after "&" in the DB Coloumn names
+   		     CommaSelect= CommaSelect + SelectArray[i] + "\n";
+		   else{
+		    if (i == 0) //For Don't Removing the DISTINCT in SELECT STATEMENT
+			  CommaSelect= CommaSelect + SelectArray[i] + "\n";
+			else{
+               if(SelectArray[i].indexOf("&") != -1 )
+     	    	   CommaSelect= CommaSelect + SelectArray[i].substring(0,SelectArray[i].indexOf("&")) + "\n";
+     		   else
+                 CommaSelect= CommaSelect + SelectArray[i].substring(0,SelectArray[i].indexOf(" ")) + "\n";
+              }
+            }
+	       }
+ 	   else{
+	     if(SelectArray[i].indexOf(" ") == -1 ) // Removing the string after "&" in the DB Coloumn names
+		   CommaSelect= CommaSelect + rtrim(ltrim(SelectArray[i]))  +","+ "\n";
+         else
+		 {
+		    if(SelectArray[i].indexOf("&") != -1 )
+     		   CommaSelect= CommaSelect + rtrim(ltrim(SelectArray[i].substring(0,SelectArray[i].indexOf("&")))) +","+ "\n";
+            else
+      		   CommaSelect= CommaSelect + rtrim(ltrim(SelectArray[i].substring(0,SelectArray[i].indexOf(" ")))) +","+ "\n";
+         }
+	   }
+	}
+
+
+	//fromPart   = SqrStr.substring(SqrStr.indexOf("FROM"), SqrStr.length);
+//  alert(Commaselect.replace(/\\s/,""));
+
+   StrSQL= CommaSelect + fromPart ;
+
+  //Removing the Commented lines For Ex: WHERE EMPLID='123' ! Checking Employee ID
+   ArraySQL = StrSQL.split("\n");
+//    alert(ArraySQL[i]) ;
+    for (i=0; i < ArraySQL.length; i++) {
+	   if(rtrim(ltrim((ArraySQL[i]))) != ""){
+	   if((ArraySQL[i].indexOf("!") == -1)  )
+         FinalSQL= FinalSQL + ArraySQL[i] + "\n";
+	   else
+    	FinalSQL= FinalSQL + ArraySQL[i].substring(0,ArraySQL[i].indexOf("!")) + "\n";
+     }
+	}
+
+	while(FinalSQL.search(",,")!=-1)
+	{
+		FinalSQL = FinalSQL.replace(",,",",");
+	}
+
+  return FinalSQL;
+  }
+
+
+  function ltrim(str) {
+     var chars;
+	 chars = "\\s";
+	 return str.replace(new RegExp("^[" + chars + "]+", "g"), "");
+ }
+
+ function rtrim(str) {
+     var chars;
+     chars = "\\s";
+     return str.replace(new RegExp("[" + chars + "]+$", "g"), "");
+ }
+
+ function clearForm(frm){
+  frm.sqrsql.value="";
+  frm.sql.value="";
+
+ }
+
+document.title = 'SQL Grabber - A SQR Tool'
+
+</script>
+ <BODY>
+<STYLE type="text/css"><!--BODY{background-color:#ffffff;font-family:verdana,sans-serif}PRE{font-family:sans-serif}--></STYLE>
+
+
+  <Center>
+
+           <font name= >
+	      <h3>SQL Grabber - A SQR Tool</h3>
+	  </font>
+<table border =15>
+<td>
+   <Table  valign="top">
+       <Form Name="frmsql">
+	<tr>
+		<td>
+			<B>Paste your SQR-SQL (Compiled SQR BEGIN-SELECT block) below: </B>
+		</td>
+	</tr>
+         <tr>
+		 <td>
+			  <textarea name="sqrsql" rows=10 cols=80>
+
+</textarea>
+		 </td>
+          </tr>
+          <tr>
+                 <td align="right">
+		  				  <input type="Reset"  name="Clear" value="Clear"  />
+                          <input type="button"  name="submit" value="  Get RDBMS SQL  " onclick="GetSQL(this.form)"/>
+
+                 </td>
+          </tr>
+	<tr>
+		<td>
+			<B>RDBMS-SQL : </B>
+		</td>
+	</tr>
+
+
+          <tr>
+                 <td>
+                          <textarea name="sql" rows=10 cols=80 readonly> </textarea>
+                 </td>
+          </tr>
+       </form>
+    </table>
+</td>
+</table>
+
+<table>
+ <tr>
+	<td> &nbsp; </td>
+ </tr>
+ <tr>
+
+	<td align="right">
+               <input type=button value="About SQL Grabber" onClick="ShowAboutSQRGrabber(this.form)">
+	</td>
+	<td align="right">
+		<input type=button value="Help" onClick="ShowHelp(this.form)">
+	</td>
+
+
+ <tr>
+</table>
+
+</Center>
+ </BODY>
+</HEAD>
+
+</HTML>
