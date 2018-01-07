@@ -1,0 +1,52 @@
+select * from (
+select * from (select '483037' as CASE_ID, '1' as PROJECT_ID,0 as SEQ_NBR, decode(msg.Message_parm1,'Records',decode(rtrim((msg.Message_parm1 || item.objectvalue2),' '),'Records', 'Records', 'Record Field')
+                   ,msg.Message_parm1) as Type
+,decode(msg.message_parm1,'Component Rec Fld PeopleCode' ,item.objectvalue1 || '.' ||  item.objectvalue3 || '.' || item.objectvalue4 ,
+                                                                   'Records' ,item.objectvalue1 || '' ||  decode(item.objectvalue2,' ', '',('.' || item.objectvalue2)),
+                                                                   item.objectvalue1 || '' ||  decode(item.objectvalue2,' ', '',('.' || item.objectvalue2)) || '' ||  
+                                                                   decode(item.objectvalue3,' ', '',('.' || item.objectvalue3)) 
+                                                                   || '' || decode(item.objectvalue4,' ', '',('.' || item.objectvalue4))) as "Name" , 'N' as Action ,'Created for Dependent Module upgrade from 8.8 to 8.9' as DESCR
+from psprojectitem item ,(select distinct objecttype as type,
+ Message_parm1 from psprojectmsg 
+where projectname = 'HP_PSHD483037_AUDIT' and objecttype > 0
+union
+select 0,'Records' from dual)  msg  where item.projectname = 'HP_PSHD483037_AUDIT'
+and msg.type= item.objecttype
+minus   
+select '483037' as CASE_ID, '1' as PROJECT_ID,0 as SEQ_NBR, decode(msg.Message_parm1,'Records',decode(rtrim((msg.Message_parm1 || item.objectvalue2),' '),'Records', 'Records', 'Record Field')
+                   ,msg.Message_parm1) as Type
+,decode(msg.message_parm1,'Component Rec Fld PeopleCode' ,item.objectvalue1 || '.' ||  item.objectvalue3 || '.' || item.objectvalue4 ,
+                                                                   'Records' ,item.objectvalue1 || '' ||  decode(item.objectvalue2,' ', '',('.' || item.objectvalue2)),
+                                                                   item.objectvalue1 || '' ||  decode(item.objectvalue2,' ', '',('.' || item.objectvalue2)) || '' ||  
+                                                                   decode(item.objectvalue3,' ', '',('.' || item.objectvalue3)) ) as "Name" , 'N' as Action ,'Created for Dependent Module upgrade from 8.8 to 8.9' as DESCR
+from prj_item_temp item ,(select distinct objecttype as type,
+ Message_parm1 from psprojectmsg where projectname = 'HP_PSHD483037_AUDIT' and  objecttype > 0
+union 
+select 0,'Records' from dual)  msg  where  msg.type= item.objecttype)
+
+
+union all
+select * from (select '483037' as CASE_ID, '1' as PROJECT_ID,0 as SEQ_NBR, decode(msg.Message_parm1,'Records',decode(rtrim((msg.Message_parm1 || item.objectvalue2),' '),'Records', 'Records', 'Record Field')
+                   ,msg.Message_parm1) as Type
+,decode(msg.message_parm1,'Component Rec Fld PeopleCode' ,item.objectvalue1 || '.' ||  item.objectvalue3 || '.' || item.objectvalue4 ,
+                                                                   'Records' ,item.objectvalue1 || '' ||  decode(item.objectvalue2,' ', '',('.' || item.objectvalue2)),
+                                                                   item.objectvalue1 || '' ||  decode(item.objectvalue2,' ', '',('.' || item.objectvalue2)) || '' ||  
+                                                                   decode(item.objectvalue3,' ', '',('.' || item.objectvalue3)) 
+                                                                   || '' || decode(item.objectvalue4,' ', '',('.' || item.objectvalue4))) as "Name" , 'C' as Action ,'Changed during Dependent Module Upgrade from 8.8 to 8.9' as DESCR
+from psprojectitem item ,(select distinct objecttype as type,
+ Message_parm1 from psprojectmsg 
+where projectname = 'HP_PSHD483037_AUDIT' and objecttype > 0
+union
+select 0,'Records' from dual)  msg  where item.projectname = 'HP_PSHD483037_AUDIT'
+and msg.type= item.objecttype
+intersect  
+select '483037' as CASE_ID, '1' as PROJECT_ID,0 as SEQ_NBR, decode(msg.Message_parm1,'Records',decode(rtrim((msg.Message_parm1 || item.objectvalue2),' '),'Records', 'Records', 'Record Field')
+                   ,msg.Message_parm1) as Type
+,decode(msg.message_parm1,'Component Rec Fld PeopleCode' ,item.objectvalue1 || '.' ||  item.objectvalue3 || '.' || item.objectvalue4 ,
+                                                                   'Records' ,item.objectvalue1 || '' ||  decode(item.objectvalue2,' ', '',('.' || item.objectvalue2)),
+                                                                   item.objectvalue1 || '' ||  decode(item.objectvalue2,' ', '',('.' || item.objectvalue2)) || '' ||  
+                                                                   decode(item.objectvalue3,' ', '',('.' || item.objectvalue3)) ) as "Name" , 'C' as Action ,'Changed during Dependent Module Upgrade from 8.8 to 8.9' as DESCR
+from prj_item_temp item ,(select distinct objecttype as type,
+ Message_parm1 from psprojectmsg where projectname = 'HP_PSHD483037_AUDIT' and  objecttype > 0
+union 
+select 0,'Records' from dual)  msg  where  msg.type= item.objecttype ))  Obj order by Obj.type
