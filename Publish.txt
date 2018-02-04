@@ -1,0 +1,501 @@
+Example : 1
+===========
+run:
+Enter the command : 
+c 30 10   ===>  Command to draw a box.
+Enter the command : 
+l 1 5 6 5  ==> Command to draw a horizontal line
+Enter the command : 
+l 6 5 6 10 ==> Command to draw a vertical line
+Enter the command : 
+l 14 5 29 5 ==> Command to draw a horizontal line
+Enter the command : 
+l 14 5 14 10 ==> Command to draw a vertical line
+Enter the command : 
+l 14 4 29 4 ==> Command to draw a horizontal line
+Enter the command : 
+l 14 1 14 4 ==> Command to draw a vertical line
+Enter the command : 
+b 7 8 F ==> Command to fill with character F
+Enter the command : 
+q       ==> Command to quit
+
+------------------------------
+|FFFFFFFFFFFFFX               |
+|FFFFFFFFFFFFFX               |
+|FFFFFFFFFFFFFX               |
+|FFFFFFFFFFFFFXXXXXXXXXXXXXXXX|
+|XXXXXXFFFFFFFXXXXXXXXXXXXXXXX|
+|     XFFFFFFFX               |
+|     XFFFFFFFX               |
+|     XFFFFFFFX               |
+|     XFFFFFFFX               |
+|     XFFFFFFFX               |
+------------------------------BUILD SUCCESSFUL (total time: 2 minutes 19 seconds)
+
+Example : 2
+===========
+
+run:
+Enter the command : 
+c 30 10  ==> Command to draw a box
+Enter the command : 
+l 1 5 6 5  ==> Command to draw a horizontal line
+Enter the command : 
+l 6 5 6 10  ==> Command to draw a vertical line
+Enter the command : 
+r 14 1 18 3  ==> Command to draw a box
+Enter the command : 
+b 2 7 F  ==> Command to fill with character F
+Enter the command : 
+q   ==> Command to fill with character F
+
+------------------------------
+|             XXXXX           |
+|             X   X           |
+|             XXXXX           |
+|                             |
+|XXXXXX                       |
+|FFFFFX                       |
+|FFFFFX                       |
+|FFFFFX                       |
+|FFFFFX                       |
+|FFFFFX                       |
+------------------------------BUILD SUCCESSFUL (total time: 1 minute 49 seconds)
+
+
+Example : 3
+===========
+run:
+Enter the command : 
+c 30 10
+Enter the command : 
+l 1 5 6 5
+Enter the command : 
+l 6 5 6 10
+Enter the command : 
+l 14 5 29 5
+Enter the command : 
+l 14 5 14 10
+Enter the command : 
+l 14 4 29 4
+Enter the command : 
+l 14 1 14 4
+Enter the command : 
+l 1 4 6 4
+Enter the command : 
+l 6 1 6 4
+Enter the command : 
+b 15 3 F
+Enter the command : 
+q
+------------------------------
+|     X       XFFFFFFFFFFFFFFF|
+|     X       XFFFFFFFFFFFFFFF|
+|     X       XFFFFFFFFFFFFFFF|
+|XXXXXX       XXXXXXXXXXXXXXXX|
+|XXXXXX       XXXXXXXXXXXXXXXX|
+|     X       X               |
+|     X       X               |
+|     X       X               |
+|     X       X               |
+|     X       X               |
+------------------------------BUILD SUCCESSFUL (total time: 2 minutes 48 seconds)
+
+
+
+Java code
+==========
+
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package Graphics;
+
+import java.util.Scanner;
+
+/**
+ *
+ * @Remil
+ * 
+ * 
+ */
+
+ class Fetch_Input_Parameters{  
+ int x1,x2,x3,x4,y1,Cy2,y3,y4; 
+ String Command1,Input1;
+ String [] Canvas_Paramter_Format={"C w h","L x1 y1 x2 y2","R x1 y1 x2 y2","B x y c","Q"};
+ String [] Canvas_Paramter_Values= new String[50];
+ Boolean BoolLoop=true;
+ int index1=0;
+ public  String[] Fetch_Input (){
+     
+     
+     Scanner sc=new Scanner(System.in);
+       while (BoolLoop) {
+      System.out.println("Enter the command : " );
+     Input1=sc.nextLine();
+     Command1=Input1;
+     Canvas_Paramter_Values[index1]=Command1;
+     index1=index1+1;
+ 
+ if (Command1.equalsIgnoreCase("q")){
+ break;    
+ }
+  
+
+     
+     }
+      return Canvas_Paramter_Values;
+ }
+ 
+}  
+
+
+class Draw_Line{
+    public String Draw_Line_Vertical (String Intermediate_Str1 ,String x1 ,String y1, String x2,String y2,String width1_sting ) {
+        
+        int x1_int=0, y1_int=0, x2_int=0, y2_int=0, width1_int=0 ;
+        int Starting_Pos=0, Ending_Pos=0;
+        x1_int= Integer.parseInt(x1);
+        y1_int= Integer.parseInt(y1);
+        x2_int= Integer.parseInt(x2);
+        y2_int= Integer.parseInt(y2);
+        width1_int=Integer.parseInt(width1_sting);
+        StringBuilder Inter_Str= new StringBuilder(Intermediate_Str1);
+         // w + (w x(y1-1)) + x1+ ((y1-1) X 2)+2-- fist time 
+         // w + (w x(y2-1)) + x1+ ((y2-1) x 2)+2  -- subsequent loop
+         
+         Starting_Pos= 1+width1_int+ (width1_int * (y1_int-1))+x1_int+((y1_int-1)*2) ;
+         //int Int_Inc=0;
+        for (int index3=y1_int; index3 <=y2_int+1; index3++){
+            Ending_Pos=Starting_Pos+1;
+            Inter_Str=Inter_Str.replace(Starting_Pos,Ending_Pos, "X");
+            Starting_Pos=1+ width1_int+ (width1_int * (index3-1))+x1_int+((index3-1)*2) ;
+        }
+        Intermediate_Str1=Inter_Str.toString();
+        return Intermediate_Str1;
+    
+        
+        
+    }
+    
+   public String Draw_Line_Horizontal(String Intermediate_Str1 ,String x1 ,String y1, String x2,String y2,String width1_sting) {
+       
+         int x1_int=0, y1_int=0, x2_int=0, y2_int=0, width1_int=0 ;
+        int Starting_Pos=0, Ending_Pos=0, Int_repeat=0;
+        x1_int= Integer.parseInt(x1);
+        y1_int= Integer.parseInt(y1);
+        x2_int= Integer.parseInt(x2);
+        y2_int= Integer.parseInt(y2);
+        width1_int=Integer.parseInt(width1_sting);
+        StringBuilder Inter_Str= new StringBuilder(Intermediate_Str1);
+        String Str_X="";
+        int diff_int=x2_int-x1_int;
+        for (int i=0; i<=diff_int;i++){
+           Str_X= Str_X+ "X"; 
+        }
+        
+         // w + (w x(y1-1)) + x1+ ((y1-1) X 2)-- starting position 
+         // w + (w x(y2-1)) + x2+ ((y2-1) x 2) -- ending position
+         
+         Starting_Pos= 1+width1_int+ (width1_int * (y1_int-1))+x1_int+((y1_int-1)*2) ;
+         Ending_Pos=2+width1_int+ (width1_int * (y2_int-1))+x2_int+((y2_int-1)*2) ;
+         System.out.print("Starting_Pos:"+ Starting_Pos + "\n");
+         System.out.print("Ending_Pos:"+ Ending_Pos+ "\n");
+         Inter_Str=Inter_Str.replace(Starting_Pos,Ending_Pos, Str_X);
+         
+        
+        Intermediate_Str1=Inter_Str.toString();
+        return Intermediate_Str1;
+    
+        
+   } 
+   
+}
+
+class Draw_Shape{
+    int breadth_int=0, height_int=0;
+    String Box_String="";
+     StringBuilder Rectangle1= new StringBuilder("");
+    String Draw_Canvas(String Command1, String Breadth , String Height){
+       // System.out.print(Command1 + " : " + Breadth+ " : " +Height  );
+       //Draw Box
+       breadth_int= Integer.parseInt(Breadth);
+       height_int= Integer.parseInt(Height);
+       //System.out.print(breadth_int +  " :" + height_int );
+        
+for (int Width1=1;Width1<=breadth_int;Width1++){
+    Box_String=Box_String + "-";
+}  
+//System.out.print("First line :" + Box_String.length()+ "\n");
+for (int Height1=1;Height1<=height_int;Height1++){
+    Box_String=Box_String + "\n"+  "|";
+    for (int Width2=1;Width2<=breadth_int-1;Width2++){
+       Box_String=Box_String + " "; 
+    }
+    Box_String=Box_String +   "|";
+   // System.out.print("in between line :" + Box_String.length()+ "\n");
+}  
+Box_String=Box_String + "\n";
+
+for (int Width3=1;Width3<=breadth_int;Width3++){
+   Box_String=Box_String + "-";
+}  
+
+//System.out.print("last line :" + Box_String.length());
+       return(Box_String);
+   // System.out.print(Box_String);        
+            }
+}
+
+class Fill_Box{
+    public String  Fill_Box1(String Intermediate_Str1 ,String x ,String y, String Shape1,String Width,String [] Input_String1 ){
+        
+
+int width1_int=Integer.parseInt(Width);
+int y_int=Integer.parseInt(y);
+int x_int=Integer.parseInt(x);
+int Starting_Pos= 1+width1_int+ (width1_int * (y_int-1))+x_int+((y_int-1)*2) ;
+int Start_pos=0,Box_Begin=0, Box_End=0;
+char Individual_String, Fill_String=' ';
+int x1_int=0,y1_int=0,x2_int=0,y2_int=0, index5=0;
+int Lx1_int=0,Ly1_int=0,Lx2_int=0,Ly2_int=0;
+String [] Input_String2= new String[50];
+String First_Sting, Last_String,Comm4="R",Fill_Char="",Comm5="L",Dup_Char="",Comm6="q";
+Boolean Boolbox_1 =false,result,result1,bool_Inside_Box=false, result3=false;
+
+ Intermediate_Str1=Intermediate_Str1.replace(" ", Shape1);
+ StringBuilder Sz_Intermediate_String= new StringBuilder(Intermediate_Str1);
+ StringBuilder Sz_Intermediate_String_1= new StringBuilder("");
+ //System.out.print(Intermediate_Str1);
+// combine all the L to R and fetch R  and Q commands
+index5=0;
+//System.out.print("Input_String1.length:" + Input_String1.length);
+
+ for (int index4=0; index4 <=Input_String1.length-1;index4++ ){
+     
+     String[] Parameter_Split1 = Input_String1[index4].split("\\s+");
+     result1 =Parameter_Split1[0].equalsIgnoreCase(Comm6);
+     result =Parameter_Split1[0].equalsIgnoreCase(Comm4);
+     result3=Parameter_Split1[0].equalsIgnoreCase(Comm5);
+    
+       if (result|| result1 ) {
+       Input_String2[index5]=Input_String1[index4];
+       index5=index5+1;
+       }
+    
+       if (result3){
+        //only capture horizontal line
+        if (Parameter_Split1[2].equalsIgnoreCase(Parameter_Split1[4])){
+         Input_String2[index5]=Input_String1[index4];
+         index5=index5+1;  
+        }
+        //only capture horizontal line
+       }
+      if (result1){
+        break;
+        }
+    
+ }
+ 
+ for (int index4=0; index4 <=Input_String1.length-1;index4++ ){
+ //pick up verrtical line and convert to R command
+   String[] Parameter_Split2 = Input_String1[index4].split("\\s+");
+   result3=Parameter_Split2[0].equalsIgnoreCase(Comm5);
+    result1 =Parameter_Split2[0].equalsIgnoreCase(Comm6);
+   if (result1){
+        break;
+        }
+  
+   if (result3){
+  
+    //find the matching  horizontal line
+        if (Parameter_Split2[1].equalsIgnoreCase(Parameter_Split2[3])){
+            System.out.print(Parameter_Split2[1] + " :" + Parameter_Split2[3]+ "\n" );
+          for (int index6=0; index6 <=Input_String2.length-1;index6++ ){  
+               String[] Parameter_Split3 = Input_String2[index6].split("\\s+");
+               result1 =Parameter_Split3[0].equalsIgnoreCase(Comm6);
+               result =Parameter_Split3[0].equalsIgnoreCase(Comm5);
+             if (result1){
+                break;
+            }
+             if (result){
+                if((Parameter_Split3[2].equalsIgnoreCase(Parameter_Split2[2])) && (Parameter_Split3[4].equalsIgnoreCase(Parameter_Split2[2])) && (Parameter_Split3[3].equalsIgnoreCase(Parameter_Split2[1])) && (Parameter_Split3[3].equalsIgnoreCase(Parameter_Split2[3]))){
+          Input_String2[index6] =Parameter_Split3[0] + " " + Parameter_Split3[1] + " " + Parameter_Split3[2] + " " + Parameter_Split2[3] + " " + Parameter_Split2[4] ;
+          break;
+        }
+              
+               if((Parameter_Split3[2].equalsIgnoreCase(Parameter_Split2[4])) && (Parameter_Split3[4].equalsIgnoreCase(Parameter_Split2[4])) && (Parameter_Split3[3].equalsIgnoreCase(Parameter_Split2[1])) && (Parameter_Split3[3].equalsIgnoreCase(Parameter_Split2[3]))){
+          Input_String2[index6] =Parameter_Split3[0] + " " + Parameter_Split3[1] + " " + Parameter_Split2[2] + " " + Parameter_Split2[3] + " " + Parameter_Split2[4] ;
+          break;
+        }
+if((Parameter_Split3[1].equalsIgnoreCase(Parameter_Split2[1])) && (Parameter_Split3[1].equalsIgnoreCase(Parameter_Split2[3])) && (Parameter_Split3[2].equalsIgnoreCase(Parameter_Split2[2])) && (Parameter_Split3[4].equalsIgnoreCase(Parameter_Split2[2]))) {
+          Input_String2[index6] =Parameter_Split3[0] + " " +Parameter_Split3[1] + " " + Parameter_Split3[2] + " " + Parameter_Split3[3] + " " + Parameter_Split2[4] ;
+          break;
+        }
+if((Parameter_Split3[1].equalsIgnoreCase(Parameter_Split2[1])) && (Parameter_Split3[1].equalsIgnoreCase(Parameter_Split2[3])) && (Parameter_Split3[2].equalsIgnoreCase(Parameter_Split2[4])) && (Parameter_Split3[4].equalsIgnoreCase(Parameter_Split2[4]))) {
+          Input_String2[index6] =Parameter_Split3[0] + " " +Parameter_Split3[1] + " " + Parameter_Split2[2] + " " + Parameter_Split3[3] + " " + Parameter_Split2[4] ;
+          break;
+        }
+
+          } } 
+        }
+   }
+    
+ }
+ 
+
+ for (int index6=0; index6 <=5;index6++ ){    
+            System.out.print("Input_String2[ " + index6 + "]" +  Input_String2[index6] + "\n" );
+        }
+            
+        
+// combine all the L to R
+  for (int index3=0; index3 <=Input_String2.length-1;index3++ ){
+      Boolbox_1 =false;
+  
+      String[] Parameter_Split = Input_String2[index3].split("\\s+");
+        if (Parameter_Split[0].equalsIgnoreCase("q")){
+       break;    
+      }
+        x1_int= Integer.parseInt(Parameter_Split[1]);
+        y1_int= Integer.parseInt(Parameter_Split[2]);
+         x2_int= Integer.parseInt(Parameter_Split[3]);
+         y2_int= Integer.parseInt(Parameter_Split[4]);
+      
+    
+         if  ((x_int>x1_int) & (x_int<x2_int))
+         {
+          if  ((y_int>y1_int) & (y_int<y2_int)){
+              Boolbox_1 = true;
+               System.out.print("Boolbox: inside if"+ Boolbox_1+ "\n");
+          }
+      }
+     
+      
+      
+      if (Boolbox_1) {
+          Fill_Char=Shape1;
+          Dup_Char="±";
+          bool_Inside_Box=true;
+      } else{
+        Fill_Char=" ";
+        Dup_Char=" ";
+        bool_Inside_Box=false;
+      }
+     
+     // System.out.print("Fill_Char:"+ Fill_Char+ "\n");
+     // System.out.print("Boolbox:"+ Boolbox_1+ "\n");
+      for (int y_pos=y1_int;y_pos<=y2_int;y_pos++){
+           for (int x_pos=x1_int;x_pos<=x2_int;x_pos++){
+               Start_pos=1+width1_int+ (width1_int * (y_pos-1))+x_pos+((y_pos-1)*2) ;
+              Individual_String=Sz_Intermediate_String.charAt(Start_pos);
+              if  (Individual_String==Shape1.charAt(0)){
+                 Sz_Intermediate_String=Sz_Intermediate_String.replace(Start_pos,(Start_pos+1), Dup_Char);
+                 //Sz_Intermediate_String=Sz_Intermediate_String.replace(Start_pos,(Start_pos+1), "M");
+                 //System.out.print(Sz_Intermediate_String.toString()+ "\n");
+                  
+              }   
+              
+           }}
+     
+
+        if (bool_Inside_Box){
+        //  break;
+         Intermediate_Str1=Sz_Intermediate_String.toString();
+         //System.out.print(Intermediate_Str1+ "\n");
+         Intermediate_Str1=Intermediate_Str1.replace(Shape1, " ");
+         //System.out.print(Intermediate_Str1+ "\n");
+         Intermediate_Str1=Intermediate_Str1.replace(Dup_Char, Shape1);
+         //System.out.print(Intermediate_Str1+ "\n");
+         break;
+        }
+        else{
+         Intermediate_Str1=Sz_Intermediate_String.toString();
+         //System.out.print(Intermediate_Str1+ "\n");
+         Intermediate_Str1=Intermediate_Str1.replace(Dup_Char, " ");
+         //System.out.print(Intermediate_Str1+ "\n");   
+        }
+            
+            
+
+     }
+  
+ 
+      
+  return Intermediate_Str1 ;
+}
+}
+
+
+ 
+
+
+public class Graphics {
+   
+     static String [] Individual_Paramters= new String[5];
+     static String Comm1="C", Final_String="",Comm2="L", Comm3="R", Comm4="B", Comm5="q";
+     static String  width_str="";
+    public static void main(String [] args){
+       // System.err.println("test");
+       Fetch_Input_Parameters FI= new Fetch_Input_Parameters();
+       Draw_Shape R1= new Draw_Shape();
+       Draw_Line L1= new Draw_Line();
+       Fill_Box FB1= new Fill_Box();
+       Individual_Paramters=FI.Fetch_Input();
+       for (int index2=0; index2 <=Individual_Paramters.length-1;index2++ ){
+       // System.out.println(Individual_Paramters[index2]);
+      
+       String[] Parameter_Split = Individual_Paramters[index2].split("\\s+");
+        if (Parameter_Split[0].equalsIgnoreCase(Comm5)) {
+           break;
+       }
+       boolean result =Parameter_Split[0].equalsIgnoreCase(Comm1);
+     if (result){
+       Final_String= R1.Draw_Canvas(Parameter_Split[0],Parameter_Split[1],Parameter_Split[2]);
+       width_str=Parameter_Split[1];
+       }
+        result =Parameter_Split[0].equalsIgnoreCase(Comm2);
+       
+     if (result ){
+          boolean result1 =Parameter_Split[1].equalsIgnoreCase(Parameter_Split[3]);
+      if (result1) {    
+       Final_String= L1.Draw_Line_Vertical(Final_String,Parameter_Split[1],Parameter_Split[2],Parameter_Split[3],Parameter_Split[4],width_str);
+      // System.out.print(Final_String); 
+       }
+      boolean result2 =Parameter_Split[2].equalsIgnoreCase(Parameter_Split[4]);
+      if (result2) {    
+       Final_String= L1.Draw_Line_Horizontal(Final_String,Parameter_Split[1],Parameter_Split[2],Parameter_Split[3],Parameter_Split[4],width_str);
+      // System.out.print(Final_String); 
+       }
+     }
+     
+     result =Parameter_Split[0].equalsIgnoreCase(Comm3);
+     if (result ){
+         
+         Final_String= L1.Draw_Line_Vertical(Final_String,Parameter_Split[1],Parameter_Split[2],Parameter_Split[1],Parameter_Split[4],width_str);
+         Final_String= L1.Draw_Line_Vertical(Final_String,Parameter_Split[3],Parameter_Split[2],Parameter_Split[3],Parameter_Split[4],width_str);
+         Final_String= L1.Draw_Line_Horizontal(Final_String,Parameter_Split[1],Parameter_Split[2],Parameter_Split[3],Parameter_Split[2],width_str);
+         Final_String= L1.Draw_Line_Horizontal(Final_String,Parameter_Split[1],Parameter_Split[4],Parameter_Split[3],Parameter_Split[4],width_str);
+         
+     }
+     
+     result =Parameter_Split[0].equalsIgnoreCase(Comm4);
+     if (result ){
+        Final_String= FB1.Fill_Box1(Final_String, Parameter_Split[1], Parameter_Split[2], Parameter_Split[3], width_str,Individual_Paramters);
+     }
+       }
+        
+        System.out.print(Final_String); 
+    }
+     
+}
+
+
+
+
+
